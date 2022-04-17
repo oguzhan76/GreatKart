@@ -1,10 +1,20 @@
-from tkinter import E
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from category.models import Category
 from .models import Product
+from carts.views import _getCartId, _getOrCreateCart
+from carts.models import CartItem
 
 # Create your views here.
+
+def _isProductInCart(request, product):
+    cart = _getOrCreateCart(request)
+    try:
+        item = CartItem.objects.get(product=product, cart=cart)
+        return True
+    except CartItem.DoesNotExist:
+        return False
 
 def Store(request, categorySlug=None):
     categories = None
@@ -31,7 +41,10 @@ def ProductDetail(request, categorySlug, productSlug):
     except Exception as e:
         raise e
 
+    incart = CartItem.objects.filter(product=product, cart__cart_id=_getCartId(request)).exists()
+    print(type(incart))
     context = {
-        'product': product
+        'product': product,
+        'inCart': incart,
     }
     return render(request, 'store/product_detail.html', context)

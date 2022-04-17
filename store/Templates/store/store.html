@@ -146,7 +146,12 @@
 						<del class="price-old">$ {{ product.price }}</del>
 					</div> <!-- price-wrap.// -->
 				</div>
-				<a href="#" class="btn btn-block btn-primary">Add to cart </a>
+				{% if inCart %}
+				<h5>Added to cart</h5>
+				{% else %}
+				<a href="{% url 'addToCart' product.id %}" class="btn btn-block btn-primary">Add to cart </a>
+				{% endif %}
+
 			</figcaption>
 		</figure>
 	</div> <!-- col.// -->
