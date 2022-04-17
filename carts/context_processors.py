@@ -12,6 +12,5 @@ def itemCountInCart(request):
             itemCount += item.quantity
             # print('Successfull')
     except:
-        itemCount = 0
-        print(itemCount)
+        pass
     return dict(itemCount = itemCount)

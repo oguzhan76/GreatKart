@@ -146,11 +146,7 @@
 						<del class="price-old">$ {{ product.price }}</del>
 					</div> <!-- price-wrap.// -->
 				</div>
-				{% if inCart %}
-				<h5>Added to cart</h5>
-				{% else %}
-				<a href="{% url 'addToCart' product.id %}" class="btn btn-block btn-primary">Add to cart </a>
-				{% endif %}
+				<a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details</a>
 
 			</figcaption>
 		</figure>

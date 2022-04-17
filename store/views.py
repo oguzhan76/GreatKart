@@ -27,10 +27,9 @@ def Store(request, categorySlug=None):
         products = Product.objects.all()
     
     product_count = products.count()
-    
     context = {
         'products': products,
-        'product_count': product_count
+        'product_count': product_count,
     }
 
     return render(request, 'store/store.html', context)
@@ -42,7 +41,6 @@ def ProductDetail(request, categorySlug, productSlug):
         raise e
 
     incart = CartItem.objects.filter(product=product, cart__cart_id=_getCartId(request)).exists()
-    print(type(incart))
     context = {
         'product': product,
         'inCart': incart,
