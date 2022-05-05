@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from .models import Cart, CartItem
-from store.models import Product
+from store.models import Product, Variation
 
 # Create your views here.
 def _getCartId(request):
@@ -28,16 +28,33 @@ def _getCartItem(cartItemId):
 
 def AddToCart(request, productId):
     product = Product.objects.get(id=productId)
-    cart = _getOrCreateCart(request)
+    product_variaton = []
+    # Handle post requests with variatons
+    if request.method == 'POST':
+        for item in request.POST:
+            key = item
+            value = request.POST[item]
 
+            try:
+                variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                product_variaton.append(variation)
+            except:
+                pass
+
+    cart = _getOrCreateCart(request)
+    #print('var length: ', len(product_variaton))
     #Get or create cartItem for the product that is wanted to be added to the cart
     try: #If the cart has already got the same product - hence cartItem - we just increase quantity 
         cartItem = CartItem.objects.get(product=product, cart=cart)
         cartItem.quantity += 1
-        cartItem.save()
     except CartItem.DoesNotExist:
         cartItem = CartItem.objects.create(product=product, cart=cart, quantity=1)
-        cartItem.save()
+    
+    if len(product_variaton) > 0:
+        cartItem.variation.clear()
+        for var in product_variaton:
+            cartItem.variation.add(var)
+    cartItem.save()
     #return HttpResponse(productId)
     return redirect('cart')
 
