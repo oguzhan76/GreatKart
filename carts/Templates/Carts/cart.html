@@ -36,7 +36,7 @@
 									<figcaption class="info">
 										<a href="{{ item.product.get_url }}" class="title text-dark">{{ item.product.name }}</a>
 											<p class="text-muted small">
-											{% if item.variation.all  %}
+											{% if item.variation.all %}
 												{% for var in item.variation.all %}
 													{{ var.variation_category | capfirst }} : {{ var.variation_value }} <br>
 												{% endfor %}

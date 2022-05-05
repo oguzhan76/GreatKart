@@ -55,6 +55,7 @@ def AddToCart(request, productId):
         for var in product_variaton:
             cartItem.variation.add(var)
     cartItem.save()
+
     #return HttpResponse(productId)
     return redirect('cart')
 
